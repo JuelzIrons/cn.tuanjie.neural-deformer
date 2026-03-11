@@ -1,0 +1,144 @@
+﻿#pragma kernel ApplyDeformation
+#pragma kernel ComputeTriangleNormals
+#pragma kernel ComputeVertexNormals
+
+#define KERNEL_SIZE 64
+
+// === Deformation Control Parameters ===
+float _deformationWeight;
+float _alphaMaskInfluenceWeight;
+float _modelNormalizationMaxValue;
+float _modelNormalizationMinValue;
+
+// === Buffers: Deformation Input ===
+ByteAddressBuffer _colorBuffer; /// Vertex color stream (for alpha mask)
+StructuredBuffer<float> _deformationDeltaBuffer; /// Delta positions from Sentis inference
+StructuredBuffer<uint> _vertexMappingBuffer; /// The index mapping from true vertices to reduced ones with unique positions.
+StructuredBuffer<float3> _vertexPositionsBuffer; /// Original neutral-pose vertex positions
+
+// === Buffers: Mesh Topology Information ===
+StructuredBuffer<uint> _meshTriangleIndexBuffer; /// Mesh triangle indices
+StructuredBuffer<uint> _meshAdjacencyTriangleIndexBuffer; /// Indices of triangles adjacent to each vertex
+StructuredBuffer<uint> _meshAdjacencyTriangleIndexOffsetBuffer; /// Offset of adjacency list per vertex
+StructuredBuffer<uint> _meshAdjacencyTriangleIndexStrideBuffer; /// Length of adjacency list per vertex
+RWStructuredBuffer<float3> _triangleNormalBufferRW; /// Temporary storage for triangle normals (RW)
+StructuredBuffer<float3> _triangleNormalBufferRO; /// Read-only view for triangle normals (same buffer as RW)
+
+// === Buffers: Target Mesh Information ===
+RWByteAddressBuffer _targetMeshBufferRW;
+
+// === Kernel Parameters ===
+uint _vertexCount;
+uint _triangleCount;
+uint _vertexBufferStride;
+uint _vertexPositionAttributeOffset;
+uint _vertexNormalAttributeOffset;
+uint _colorBufferOffset;
+uint _colorBufferStride;
+bool _alphaMaskedDeformationWeightEnabled;
+
+
+/// <summary>
+/// Remaps a normalized deformation value to the model's original range.
+/// </summary>
+/// <param name="x">Normalized deformation value.</param>
+/// <returns>Denormalized deformation value.</returns>
+float Denormalize(float x)
+{
+    return lerp(_modelNormalizationMinValue, _modelNormalizationMaxValue, (x * 0.5f) + 0.5f);
+}
+
+/// <summary>
+/// Applies vertex deformation based on delta positions, optionally weighted by an alpha mask.
+/// </summary>
+/// <param name="id">Dispatch thread ID corresponding to patch vertex index.</param>
+[numthreads(KERNEL_SIZE, 1, 1)]
+void ApplyDeformation(uint id : SV_DispatchThreadID)
+{
+    if (id >= _vertexCount)
+        return;
+    
+    uint uniqueVertexIndex = _vertexMappingBuffer[id];
+    float3 vertexDelta = float3(
+        Denormalize(_deformationDeltaBuffer[uniqueVertexIndex * 3]),
+        Denormalize(_deformationDeltaBuffer[uniqueVertexIndex * 3 + 1]),
+        Denormalize(_deformationDeltaBuffer[uniqueVertexIndex * 3 + 2])
+    );
+    
+    float3 neutralPosePosition = _vertexPositionsBuffer[id];
+    float alphaMaskedDeformationWeight = 1.0f;
+
+    if (_alphaMaskedDeformationWeightEnabled)
+    {
+        // Extract alpha component (vertex mask) from color buffer
+        uint color = _colorBuffer.Load(id * _colorBufferStride + _colorBufferOffset);
+        
+        // Extract alpha channel (highest 8 bits) and normalize it to [0, 1]
+        float alphaMaskWeight = saturate((float) (color >> 24) / 255.0f);
+
+        // Blend default weight with alpha mask influence weight
+        alphaMaskedDeformationWeight = lerp(1.0f, alphaMaskWeight, saturate(_alphaMaskInfluenceWeight));
+    }
+
+    float3 deformedVertexPosition = neutralPosePosition + (vertexDelta * _deformationWeight * alphaMaskedDeformationWeight);
+
+    // Write deformed position to target mesh vertex buffer
+    _targetMeshBufferRW.Store3(_vertexBufferStride * id + _vertexPositionAttributeOffset, asuint(deformedVertexPosition));
+}
+
+/// <summary>
+/// Computes triangle normals by calculating the cross product of triangle edges.
+/// </summary>
+/// <param name="id">Dispatch thread ID corresponding to triangle index.</param>
+[numthreads(KERNEL_SIZE, 1, 1)]
+void ComputeTriangleNormals(uint id : SV_DispatchThreadID)
+{
+    if (id >= _triangleCount)
+        return;
+
+    uint idx0 = _meshTriangleIndexBuffer[id * 3];
+    uint idx1 = _meshTriangleIndexBuffer[id * 3 + 1];
+    uint idx2 = _meshTriangleIndexBuffer[id * 3 + 2];
+
+    if (idx0 == idx1 || idx1 == idx2 || idx2 == idx0)
+        return;
+
+    float3 vertex0 = asfloat(_targetMeshBufferRW.Load3(idx0 * _vertexBufferStride + _vertexPositionAttributeOffset));
+    float3 vertex1 = asfloat(_targetMeshBufferRW.Load3(idx1 * _vertexBufferStride + _vertexPositionAttributeOffset));
+    float3 vertex2 = asfloat(_targetMeshBufferRW.Load3(idx2 * _vertexBufferStride + _vertexPositionAttributeOffset));
+
+    // Compute cross product to obtain triangle normal
+    float3 normal = cross(vertex1 - vertex0, vertex2 - vertex0);
+
+    // Store computed normal for later aggregation
+    _triangleNormalBufferRW[id] = normal;
+}
+
+/// <summary>
+/// Aggregates triangle normals for each vertex to compute smooth vertex normals.
+/// </summary>
+/// <param name="id">Dispatch thread ID corresponding to vertex index.</param>
+[numthreads(KERNEL_SIZE, 1, 1)]
+void ComputeVertexNormals(uint id : SV_DispatchThreadID)
+{
+    if (id >= _vertexCount)
+        return;
+
+    uint adjacencyLength = _meshAdjacencyTriangleIndexStrideBuffer[id];
+    uint adjacencyOffset = _meshAdjacencyTriangleIndexOffsetBuffer[id];
+
+    float3 accumulatedNormal = float3(0.0f, 0.0f, 0.0f);
+
+    // Accumulate normals from all adjacent triangles
+    for (uint i = 0; i < adjacencyLength; ++i)
+    {
+        uint triangleIndex = _meshAdjacencyTriangleIndexBuffer[adjacencyOffset + i];
+        accumulatedNormal += _triangleNormalBufferRO[triangleIndex];
+    }
+
+    // Ensure accumulated normal is valid, prevent NaN by zero-length vector check
+    float3 vertexNormal = normalize(accumulatedNormal);
+
+    // Write computed vertex normal to mesh buffer
+    _targetMeshBufferRW.Store3(_vertexBufferStride * id + _vertexNormalAttributeOffset, asuint(vertexNormal));
+}

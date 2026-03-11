@@ -1,0 +1,4 @@
+#unity-list-joints {
+	padding-bottom: 5px;
+	max-height: 800px;
+}

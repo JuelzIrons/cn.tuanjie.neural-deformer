@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="./LossElement.uss" />
+    <Style src="./ButtonRow.uss" />
+    <ui:Foldout text="Training Results" style="margin-top: 10px;">
+        <ui:Label tabindex="-1" text="Loss Figure" display-tooltip-when-elided="true" picking-mode="Ignore" style="align-self: flex-start;" />
+        <ui:VisualElement name="LossElement" class="loss-element" style="margin-right: 25px; margin-bottom: 10px; margin-top: 0;">
+            <ui:VisualElement name="Loss" class="loss-zone">
+                <ui:Image name="LossFigure" style="flex-grow: 1; border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0);" />
+            </ui:VisualElement>
+            <ui:Label tabindex="-1" text="(Empty)" display-tooltip-when-elided="true" name="EmptyLabel" class="loss-empty-label" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ModelElement" style="flex-grow: 1; margin-right: 25px;">
+            <ui:TextField picking-mode="Ignore" label="Model Name" enabled="true" readonly="true" name="ModelName" style="flex-shrink: 1; flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ResultButtons" class="button-row" style="flex-grow: 1; margin-top: 10px; margin-right: 25px; margin-bottom: 0;">
+            <ui:Button text="Reveal Loss" display-tooltip-when-elided="true" name="RevealLossButton" />
+            <ui:Button text="Reveal Model" name="RevealModelButton" />
+            <ui:Button text="Clear Results" display-tooltip-when-elided="true" name="ClearResultButton" />
+        </ui:VisualElement>
+    </ui:Foldout>
+</ui:UXML>

@@ -1,0 +1,27 @@
+{
+    "name": "Tuanjie.NeuralDeformer.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f06555f75b070af458a003d92f9efb00",
+        "GUID:02f771204943f4a40949438e873e3eff",
+        "GUID:5a29ff1e57e8f44d98c3ebe2c8f5c15e",
+        "GUID:22f31b74491fb45d5b598e0b935deb31",
+        "GUID:c98377141161c7746a178fb5cb1af075",
+        "GUID:9f1e7d835703842dda0e25142ed6c3c9",
+        "GUID:baf600a77e4c04e4892ea6fddd7fc131",
+        "GUID:478a2357cc57436488a56e564b08d223",
+        "GUID:6641b37355ccc4fda9ca4962c97755fe",
+        "GUID:ca9fb7d00d1db3343ab8ae64c8fab48b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

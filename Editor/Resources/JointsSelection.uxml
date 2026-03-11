@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="./ButtonRow.uss" />
+    <ui:VisualElement name="JointsTitle" class="button-row" style="flex-grow: 0;">
+        <ui:Label tabindex="-1" text="Joints" parse-escape-sequences="true" display-tooltip-when-elided="true" name="JointsHeader" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 2px; padding-right: 0; padding-bottom: 0; padding-left: 1px; flex-grow: 1;" />
+        <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="JointsSummary" />
+    </ui:VisualElement>
+    <ui:VisualElement class="button-row" style="flex-grow: 0;">
+        <ui:Button text="All" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AllButton" />
+        <ui:Button text="None" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NoneButton" />
+        <ui:Button text="Collapse" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CollapseButton" />
+        <ui:Button text="Expand" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ExpandButton" />
+    </ui:VisualElement>
+    <ui:TreeView selection-type="Multiple" name="JointsTree" horizontal-scrolling="true" show-border="true" show-alternating-row-backgrounds="All" auto-expand="true" />
+    <ui:VisualElement style="flex-grow: 0; align-items: center; justify-content: flex-end; flex-direction: row; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+        <ui:Button text="Cancel" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CancelButton" style="flex-grow: 0; width: 60px;" />
+        <ui:Button text="Apply" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ApplyButton" style="flex-grow: 0; width: 60px;" />
+    </ui:VisualElement>
+</ui:UXML>

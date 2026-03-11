@@ -1,0 +1,49 @@
+{
+  "name": "cn.tuanjie.neural-deformer",
+  "displayName": "Neural Deformer",
+  "version": "1.0.0",
+  "description": "A high-fidelity ML based mesh deformation solution, ripped from Tuanjie Engine (Chinese Unity fork) and ported to global Unity 6.",
+  "unity": "6000",
+  "unityRelease": "0f1",
+  "author": "Tuanjie R&D Team",
+  "keywords": [
+    "ai",
+    "deform",
+    "neural",
+    "machine learning",
+    "ml",
+    "mesh",
+    "deformation",
+    "animation",
+    "character",
+    "cloth",
+    "muscle",
+    "realistic",
+    "high-fidelity",
+    "skinning",
+    "vertex",
+    "gpu",
+    "sentis"
+  ],
+  "documentationUrl": "https://github.com/juelzirons/cn.tuanjie.neural-deformer",
+  "changelogUrl": "https://github.com/juelzirons/cn.tuanjie.neural-deformer/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/juelzirons/cn.tuanjie.neural-deformer/blob/main/LICENSE.md",
+  "dependencies": {
+    "com.unity.sentis": "2.1.3",
+    "com.unity.formats.alembic": "2.4.0",
+    "com.unity.editorcoroutines": "1.0.1",
+    "com.unity.render-pipelines.core": "14.1.0"
+  },
+  "samples": [
+    {
+      "displayName": "Character HDRP",
+      "description": "Simulating the nonlinear deformation of clothing fabric during the movement of a character in HDRP.",
+      "path": "Samples~/CharacterHDRP"
+    },
+    {
+      "displayName": "Character URP",
+      "description": "Simulating the nonlinear deformation of clothing fabric during the movement of a character in URP.",
+      "path": "Samples~/CharacterURP"
+    }
+  ]
+}

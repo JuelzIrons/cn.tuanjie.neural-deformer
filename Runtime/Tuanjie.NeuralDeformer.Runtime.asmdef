@@ -1,0 +1,22 @@
+{
+    "name": "Tuanjie.NeuralDeformer.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:c98377141161c7746a178fb5cb1af075",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:2665a8d13d1b3f18800f46e256720795",
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
+        "GUID:5a29ff1e57e8f44d98c3ebe2c8f5c15e",
+        "GUID:22f31b74491fb45d5b598e0b935deb31",
+        "GUID:478a2357cc57436488a56e564b08d223"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
