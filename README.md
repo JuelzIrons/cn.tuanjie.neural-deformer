@@ -3,6 +3,7 @@
 > ⚠️ This package was extracted from [Tuanjie Engine](https://unity.cn/tuanjie), the Chinese fork of Unity maintained by Unity China. It is not officially available in the global Unity registry. I ripped it and put it here so you don't have to.
 
 To add: just add by git url `https://github.com/JuelzIrons/cn.tuanjie.neural-deformer.git`
+This Very likely will not work as unity china has specific source code edits that may not be compatable
 
 **A Machine Learning-Based High-Fidelity Real-Time Mesh Deformation Solution for Tuanjie Engine.**
 
