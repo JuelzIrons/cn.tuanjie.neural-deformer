@@ -1,7 +1,7 @@
 {
   "name": "cn.tuanjie.neural-deformer",
   "displayName": "Neural Deformer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A high-fidelity ML based mesh deformation solution, ripped from Tuanjie Engine (Chinese Unity fork) and ported to global Unity 6.",
   "unity": "2022.3",
   "unityRelease": "0",
