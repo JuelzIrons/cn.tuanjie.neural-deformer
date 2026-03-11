@@ -1,0 +1,5 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+Samples~/CharacterHDRP/Characters/Textures/M_Thai_Achar2.tif filter=lfs diff=lfs merge=lfs -text
+Samples~/CharacterURP/Characters/Textures/M_Thai_Achar2.tif filter=lfs diff=lfs merge=lfs -text
+Samples~/CharacterHDRP/Characters/Textures/Face_Texture_S3_Tension_Normal.tif filter=lfs diff=lfs merge=lfs -text
