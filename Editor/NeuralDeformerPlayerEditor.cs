@@ -115,20 +115,23 @@ namespace Tuanjie.NeuralDeformer
 
         private void SwitchToSentis()
         {
-            var modelAsset = m_ModelAsset.objectReferenceValue as ModelAsset;
-            if (modelAsset != null)
+            var modelAsset = m_ModelAsset.objectReferenceValue as TextAsset;
+            if (modelAsset != null && AssetDatabase.GetAssetPath(modelAsset).EndsWith(".onnx"))
             {
                 string directory = Path.GetDirectoryName(AssetDatabase.GetAssetPath(modelAsset));
-                string sentisPath = Path.Combine(directory, $"{modelAsset.name}.sentis");
-                
+                string sentisPath = Path.Combine(directory, Path.GetFileNameWithoutExtension(modelAsset.name) + ".sentis");
+
                 if (!File.Exists(sentisPath))
                 {
-                    ModelWriter.Save(sentisPath, modelAsset);
-                    AssetDatabase.Refresh();
+                    // In Sentis 2.4.1+, use ModelLoader to load ONNX and model conversion
+                    // For ONNX to Sentis conversion, you may need to use the Sentis import workflow in Unity
+                    Debug.LogWarning("ONNX to Sentis conversion: Please manually convert the ONNX model using Unity's Sentis import workflow or use the ONNX directly with ModelLoader");
+                    return;
                 }
 
-                var sentisModelAsset = AssetDatabase.LoadAssetAtPath<ModelAsset>(sentisPath);
-                tool.modelAsset = sentisModelAsset;
+                var sentisModelAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(sentisPath);
+                if (sentisModelAsset != null)
+                    tool.modelAsset = sentisModelAsset;
             }
         }
     }

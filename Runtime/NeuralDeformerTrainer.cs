@@ -163,14 +163,17 @@ namespace Tuanjie.NeuralDeformer
         /// <summary>
         /// Full path to the loss figure (.png).
         /// </summary>
-        [SerializeField]
-        internal string lossPath { get; set; }
+        private string _lossPath;
+        /// <summary>
+        /// Full path to the loss figure (.png).
+        /// </summary>
+        internal string lossPath { get => _lossPath; set => _lossPath = value; }
 
+        private string _modelPath;
         /// <summary>
         /// Full path to the trained model (.onnx).
         /// </summary>
-        [SerializeField]
-        internal string modelPath { get; set; }
+        internal string modelPath { get => _modelPath; set => _modelPath = value; }
 
         /// <summary>
         /// Reference to the <see cref="NeuralDeformerDatasetBuilder"/> component.

@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(git lfs:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(cd \"C:\\\\Users\\\\Xera\\\\Documents\\\\GitHub\\\\cn.tuanjie.neural-deformer\" && grep -n \"BackendType\\\\.\" Runtime/NeuralDeformerPlayer.cs | grep -v \"//\" | head -15)",
+      "Bash(cd \"C:\\\\Users\\\\Xera\\\\Documents\\\\GitHub\\\\cn.tuanjie.neural-deformer\" && grep -r \"Sentis\\\\|Model\\\\|Worker\\\\|Tensor\\\\|ModelLoader\" --include=\"*.cs\" | grep -v \"^\\\\s*//\" | grep -v \"^\\\\s*\\\\*\" | grep -v \"\\\\.shape\\\\|\\\\.inputs\\\\|\\\\.outputs\\\\|\\\\.backendType\" | wc -l)"
     ]
   }
 }

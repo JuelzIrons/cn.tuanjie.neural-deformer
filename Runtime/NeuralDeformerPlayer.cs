@@ -65,7 +65,7 @@ namespace Tuanjie.NeuralDeformer
         /// (Required) Model asset (*.onnx or *.sentis) for the deformation inference.
         /// </summary>
         [SerializeField]
-        public ModelAsset modelAsset;
+        public TextAsset modelAsset;
 
         /// <summary>
         /// Backend type used for Sentis model inference (CPU or GPU).

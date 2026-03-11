@@ -337,10 +337,13 @@ namespace Tuanjie.NeuralDeformer
                 if (fullModelPath.StartsWith(fullAssetsPath))
                 {
                     var revealPath = fullModelPath.Replace(fullAssetsPath, "Assets");
-                    var modelAsset = AssetDatabase.LoadAssetAtPath<ModelAsset>(revealPath);
-                    EditorGUIUtility.PingObject(modelAsset);
-                    Selection.activeObject = modelAsset;
-                    EditorUtility.FocusProjectWindow();
+                    var modelAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(revealPath);
+                    if (modelAsset != null)
+                    {
+                        EditorGUIUtility.PingObject(modelAsset);
+                        Selection.activeObject = modelAsset;
+                        EditorUtility.FocusProjectWindow();
+                    }
                 }
                 else
                 {
